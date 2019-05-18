@@ -2,7 +2,6 @@ import feedparser
 
 from data import data_models as model
 
-feed = feedparser.parse(model.blog_links[0])
 
 """
 1) Break down the feed model; append feed model data to data_model. This will eventually turn into a database or JSON; temporary.
@@ -58,15 +57,25 @@ Link 1: Response - Example:
 
 """
 
-for i in range(0, len(feed['entries'])):
-    # *** TypeError: _add_blog_data() missing 6 required positional arguments: 'url', 'author', 'title', 'date', 'summary', and 'tags'
-    model._add_blog_data(
-        url = feed['entries'][i]['link'],
-        author = feed['entries'][i]['author'],
-        title = feed['entries'][i]['title'],
-        date = feed['entries'][i]['published'],
-        summary = feed['entries'][i]['summary'],
-        tags = [tag['term'] for tag in feed['entries'][i]['tags']] 
-    )
+for i in range(0, len(model.blog_links)):
+
+    feed = feedparser.parse(model.blog_links[i])
+
+    for i in range(0, len(feed['entries'])):
+        # *** TypeError: _add_blog_data() missing 6 required positional arguments: 'url', 'author', 'title', 'date', 'summary', and 'tags'
+        print(i)
+        try:
+            tags = [tag['term'] for tag in feed['entries'][i]['tags']]
+        except KeyError:
+            tags = []
+
+        model._add_blog_data(
+            url = feed['entries'][i]['link'],
+            author = feed['entries'][i]['author'],
+            title = feed['entries'][i]['title'],
+            date = feed['entries'][i]['published'],
+            summary = feed['entries'][i]['summary'],
+            tags = tags 
+        )
 
 import ipdb; ipdb.set_trace()

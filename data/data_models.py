@@ -37,9 +37,10 @@ blog_links = [
 blog_data = {}
 
 agent_data = {
-    'id': 1,
+    1: {
     'name': 'Mitchell Bregman',
     'email': 'mitchbregs@gmail.com'
+    }
 }
 
 email_data = {}
