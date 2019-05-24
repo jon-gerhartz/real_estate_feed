@@ -1,0 +1,18 @@
+{% block body %}
+    
+<table style="width:100%">
+    <tr>
+        <th><b>Key</b></th>
+        <th><b>Value</b></th>
+    </tr>
+
+    {% for k, v in feed.items() %}
+    <tr>
+        <td>{{k}}</td>
+        <td>{{v}}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}
