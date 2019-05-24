@@ -2,7 +2,6 @@ import feedparser
 
 from data import data_models as model
 
-
 """
 1) Break down the feed model; append feed model data to data_model. This will eventually turn into a database or JSON; temporary.
 2) Take data_model data; turn into human readable HTML form.
@@ -78,4 +77,4 @@ for i in range(0, len(model.blog_links)):
             tags = tags 
         )
 
-import ipdb; ipdb.set_trace()
+    import ipdb; ipdb.set_trace()
