@@ -171,13 +171,12 @@ def render_template(template, **kwargs):
     templ = templateEnv.get_template(template)
     return templ.render(feed=dummy_data)
 
-
-x = render_template('templates/scratch/template.html')
+x = render_template('templates/template.html')
 
 message = Mail(
     to_emails=['mitchbregs@gmail.com', 'jonathan@fieyomedia.com'],
     from_email='jonathan@fieyomedia.com',
-    subject='Weekly Real Estate Feed - June 1, 2019 - Test 15',
+    subject='Weekly Real Estate Feed - June 1, 2019',
     html_content=x)
 
 try:
