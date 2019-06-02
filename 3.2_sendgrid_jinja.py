@@ -12,7 +12,7 @@ def render_template(template, **kwargs):
         print('No template file present: %s' % template)
         sys.exit()
 
-    
+
     dummy_data = {1: {'author': 'Rima Abousleiman',
      'date': 'Thu, 23 May 2019 13:30:32 +0000',
      'summary': '<p>This award-winning "all grown up" treehouse in Mountain '
@@ -165,22 +165,20 @@ def render_template(template, **kwargs):
                'Retail',
       'url': 'https://jerseydigs.com/mahalaxmi-harbor-station-south-military-ocean-terminal-bayonne/'}}
 
-    
+
     templateLoader = jinja2.FileSystemLoader(searchpath="./")
     templateEnv = jinja2.Environment(loader=templateLoader)
     templ = templateEnv.get_template(template)
     return templ.render(feed=dummy_data)
-    
 
-x = render_template('templates/email_template.html')
+
+x = render_template('templates/scratch/template.html')
 
 message = Mail(
-    from_email='mitchbregs@gmail.com',
-    to_emails='jonathan@fieyomedia.com',
-    subject='[Test Message] Sending with Twilio SendGrid is Fun',
+    to_emails=['mitchbregs@gmail.com', 'jonathan@fieyomedia.com'],
+    from_email='jonathan@fieyomedia.com',
+    subject='Weekly Real Estate Feed - June 1, 2019 - Test 15',
     html_content=x)
-
-import ipdb; ipdb.set_trace()
 
 try:
     sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
@@ -190,4 +188,3 @@ try:
     print(response.headers)
 except Exception as e:
     print(e.message)
-

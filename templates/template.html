@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <style type="text/css">
+
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: 'Open Sans', 'Arial', sans-serif;
+      }
+
+      /* FONTS */
+      h1 {
+        /* Never get smaller than this */
+        font-size: 18px;
+      }
+
+      h2 {
+        font-size: 13px;
+        font-weight: 300;
+        font-style: italic;
+        color:rgb(190, 190, 190)
+      }
+
+      h3 {
+        font-size: 16px;
+      }
+
+      p.article_text {
+        margin-top: 3px;
+        font-size: 13px;
+      }
+
+      a.article_link {
+        font-size: 12px;
+        text-decoration: none;
+      }
+      a.powered_by {
+        font-size: 13px;
+        text-decoration: none;
+        color: rgb(251, 113, 0);
+      }
+
+      img.sponsors {
+        width: 90%;
+      }
+
+      img.agent {
+        width: 8%;
+        vertical-align: middle;
+      }
+
+      .agent_name {
+        display:inline-block;
+        vertical-align: middle;
+        margin-left: 15px;
+      }
+
+      .date {
+        font-weight: 300;
+        color: rgb(190, 190, 190)
+      }
+
+      @media (min-width:600px) {
+        h1 {
+          font-size: 20px;
+        }
+      }
+
+      @media (min-width:800px) {
+        h1 {
+          font-size: 20px;
+        }
+      }
+
+      @media (min-width:1000px) {
+        h1 {
+          /* Never get larger than this */
+          font-size: 26px;
+        }
+      }
+
+      @media (min-width:1200px) {
+        h1 {
+          /* Never get larger than this */
+          font-size: 32px;
+        }
+      }
+
+      .container {
+        width: 95%;
+        margin: auto;
+      }
+
+      /*  SECTIONS  */
+      .section {
+        clear: both;
+        padding: 0px;
+      }
+
+      /*  COLUMN SETUP  */
+      .col {
+        display: block;
+        float:left;
+        margin: 1% 0 1% 1%;
+      }
+      .col:first-child { margin-left: 0; }
+
+      /*  GROUPING  */
+      .group:before,
+      .group:after { content:""; display:table; }
+      .group:after { clear:both;}
+      .group { zoom:1; /* For IE 6/7 */ }
+
+      /*  GRID OF FOUR  */
+      .span_4_of_4 {
+        width: 100%;
+      }
+      .span_3_of_4 {
+        width: 74.75%;
+      }
+      .span_2_of_4 {
+        width: 49.5%;
+      }
+      .span_1_of_4 {
+        width: 24.25%;
+      }
+
+      /*  GO FULL WIDTH BELOW 480 PIXELS */
+      @media only screen and (max-width: 600px) {
+        .col {  margin: 1% 0 1% 0%; }
+        .span_1_of_4, .span_2_of_4, .span_3_of_4, .span_4_of_4 { width: 100%; }
+        .mobile_br {display: inline; height: 30px;}
+      }
+
+
+    </style>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700&display=swap" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="section group">
+      	<div class="col span_4_of_4">
+      	   <h1>Weekly Real Estate Feed <span class="date" style="margin-left: 5px;">June 1, 2019</span></h1>
+      	</div>
+      </div>
+
+      <div class="section group">
+        <div class="col span_1_of_4">
+          <h2 style="margin: 5px 0">Presented by</h2>
+          <img class="agent" src="https://i.imgur.com/H5FcYRp.png" /><span class="agent_name">Jon Gerhartz<span>
+        </div>
+      </div>
+
+      {% for k, v in feed.items() %}
+        <div class="section group">
+          <div class="col span_4_of_4">
+            <h2 style="margin-top: 10px;">{{ v['date'] }}</h2>
+            <h3>{{ v['title'] }}</h3>
+            <p class="article_text">{{ v['summary'] }}</p>
+            <a class="article_link" href="{{ v['url'] }}">Read more...</a>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="section group">
+        <div class="col span_4_of_4">
+          <h2 style="margin: 10px 0 5px 0;">Sponsored by</h2>
+          <table>
+            <tr>
+              <td><img class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
+              <td><img class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
+              <td><img class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+
+      <div class="section group">
+        <div class="col span_4_of_4">
+          <h2 style="margin-top: 10px;">Powered by</h2>
+          <a class="powered_by" href="https://www.fieyomedia.com/">Fieyo Media</a>
+        </div>
+      </div>
+
+
+		</div>
+
+  </body>
+</html>
