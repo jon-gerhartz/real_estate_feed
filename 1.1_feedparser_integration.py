@@ -56,25 +56,27 @@ Link 1: Response - Example:
 
 """
 
-for i in range(0, len(model.blog_links)):
+def retrieve_data(blog_links):
+    
+    blog_data = []
+    for i in range(0, len(blog_links)):
 
-    feed = feedparser.parse(model.blog_links[i])
+        feed = feedparser.parse(blog_links[i])
 
-    for i in range(0, len(feed['entries'])):
-        # *** TypeError: _add_blog_data() missing 6 required positional arguments: 'url', 'author', 'title', 'date', 'summary', and 'tags'
-        print(i)
-        try:
-            tags = [tag['term'] for tag in feed['entries'][i]['tags']]
-        except KeyError:
-            tags = []
+        for i in range(0, len(feed['entries'])):
 
-        model._add_blog_data(
-            url = feed['entries'][i]['link'],
-            author = feed['entries'][i]['author'],
-            title = feed['entries'][i]['title'],
-            date = feed['entries'][i]['published'],
-            summary = feed['entries'][i]['summary'],
-            tags = tags 
-        )
+            try:
+                tags = [tag['term'] for tag in feed['entries'][i]['tags']]
+            except KeyError:
+                tags = []
 
-    import ipdb; ipdb.set_trace()
+            blog_data.append({
+                'url': feed['entries'][i]['link'],
+                'author': feed['entries'][i]['author'],
+                'title': feed['entries'][i]['title'],
+                'date': feed['entries'][i]['published'],
+                'summary': feed['entries'][i]['summary'],
+                'tags': tags 
+            }
+
+    return blog_data
