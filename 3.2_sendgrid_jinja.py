@@ -5,6 +5,8 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import jinja2
 
+import pandas as pd
+
 def render_template(template, **kwargs):
     ''' renders a Jinja template into HTML '''
     # check if template exists
@@ -12,178 +14,37 @@ def render_template(template, **kwargs):
         print('No template file present: %s' % template)
         sys.exit()
 
-
-    dummy_data = {1: {'author': 'Rima Abousleiman',
-     'date': 'Thu, 23 May 2019 13:30:32 +0000',
-     'summary': '<p>This award-winning "all grown up" treehouse in Mountain '
-                'Lakes is a modern marvel of engineering. </p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/mid-century-modern-treehouse-for-sale-9-van-duyne-road-mountain-lakes/">Live '
-                'Amongst the Birds in This Unusual Mid-Century Modern '
-                'Treehouse</a> appeared first on <a rel="nofollow" '
-                'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-     'tags': ['Listing', 'Mountain Lakes', '9 Van Duyne Road'],
-     'title': 'Live Amongst the Birds in This Unusual Mid-Century Modern '
-              'Treehouse',
-     'url': 'https://jerseydigs.com/mid-century-modern-treehouse-for-sale-9-van-duyne-road-mountain-lakes/'},
- 2: {'author': 'Gillian Blair',
-     'date': 'Thu, 23 May 2019 13:00:39 +0000',
-     'summary': '<p>Through trusted partnerships with local New Jersey '
-                'sustainable farms, Bone-In offers a hearty organic selection '
-                'and next-day delivery to Jersey City, Hoboken, and '
-                'beyond.</p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/bone-in-local-organic-food-delivery-sustainable-farms-new-jersey/">Meet '
-                'Bone-In, the Company Delivering NJ Farms to Your Front '
-                'Door</a> appeared first on <a rel="nofollow" '
-                'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-     'tags': ['Business Profile',
-              'Food & Drink',
-              'Local Spotlight',
-              'New Jersey',
-              'Bone-In'],
-     'title': 'Meet Bone-In, the Company Delivering NJ Farms to Your Front '
-              'Door',
-     'url': 'https://jerseydigs.com/bone-in-local-organic-food-delivery-sustainable-farms-new-jersey/'},
- 3: {'author': 'Jared Kofsky',
-     'date': 'Thu, 23 May 2019 12:30:23 +0000',
-     'summary': '<p>Plans to construct a 420-unit apartment complex on a '
-                'currently undeveloped 21-acre tract between Princeton and '
-                'Hightstown could possibly be approved tonight.</p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/village-center-mixed-use-affordable-complex-proposed-west-windsor/">Village '
-                'Center Complex Could Bring 420 &#8216;Affordable&#8217; Units '
-                'to West Windsor</a> appeared first on <a rel="nofollow" '
-                'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-     'tags': ['Development', 'West Windsor', 'Village Center'],
-     'title': 'Village Center Complex Could Bring 420 ‘Affordable’ Units to '
-              'West Windsor',
-     'url': 'https://jerseydigs.com/village-center-mixed-use-affordable-complex-proposed-west-windsor/'},
- 4: {'author': 'Gillian Blair',
-     'date': 'Wed, 22 May 2019 13:30:11 +0000',
-     'summary': '<p>1425 Hudson Street at Hudson Tea offers luxury condos '
-                'complemented by equally luxurious amenities in a prime Uptown '
-                'Hoboken location.</p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/1425-hudson-street-at-hudson-tea-hoboken-luxury-condos-for-sale-rooftop-deck-pool/">Just '
-                'in Time for Summer: The Resident Rooftop at 1425 Hudson '
-                'Street is a Luxe Indulgence</a> appeared first on <a '
-                'rel="nofollow" href="https://jerseydigs.com">Jersey '
-                'Digs</a>.</p>',
-     'tags': ['Hoboken',
-              'Luxury Condos',
-              'Sponsored',
-              '1425 Hudson Street at Hudson Tea'],
-     'title': 'Just in Time for Summer: The Resident Rooftop at 1425 Hudson '
-              'Street is a Luxe Indulgence',
-     'url': 'https://jerseydigs.com/1425-hudson-street-at-hudson-tea-hoboken-luxury-condos-for-sale-rooftop-deck-pool/'},
- 5: {'author': 'Jersey Digs',
-     'date': 'Wed, 22 May 2019 13:00:05 +0000',
-     'summary': '<p>We recently rode the hoist up to the 79th floor of Jersey '
-                'City’s 99 Hudson for a first-hand look at the views from the '
-                'pinnacle of New Jersey.</p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/best-nyc-skyline-views-jersey-city-new-jersey/">The '
-                'Best Views of NYC Are in… New Jersey</a> appeared first on <a '
-                'rel="nofollow" href="https://jerseydigs.com">Jersey '
-                'Digs</a>.</p>',
-     'tags': ['Development', 'Jersey City', 'Video', '99 Hudson', 'downtown'],
-     'title': 'The Best Views of NYC Are in… New Jersey',
-     'url': 'https://jerseydigs.com/best-nyc-skyline-views-jersey-city-new-jersey/'},
- 6: {'author': 'Jared Kofsky',
-     'date': 'Wed, 22 May 2019 12:30:43 +0000',
-     'summary': "<p>Jersey City's Zoning Board will hear a proposal for a new "
-                "project that's requesting variances for use and height. </p>\n"
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/development-proposed-227-summit-avenue-mcginley-square-jersey-city/">Development '
-                'Proposal Calls for 19 Units Near McGinley Square</a> appeared '
-                'first on <a rel="nofollow" '
-                'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-     'tags': ['Development',
-              'Jersey City',
-              '227 Summit Avenue',
-              'McGinley Square'],
-     'title': 'Development Proposal Calls for 19 Units Near McGinley Square',
-     'url': 'https://jerseydigs.com/development-proposed-227-summit-avenue-mcginley-square-jersey-city/'},
- 7: {'author': 'Gillian Blair',
-     'date': 'Tue, 21 May 2019 14:00:01 +0000',
-     'summary': '<p>The luxury condos as part of the Port Imperial community '
-                'offer residents a wealth of private and public outdoor '
-                'amenities along the Hudson River waterfront.</p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/henley-on-hudson-condos-for-sale-with-outdoor-amenities-port-imperial-weehawken/">Henley '
-                'on Hudson Has Summertime Covered on New Jersey’s Gold '
-                'Coast</a> appeared first on <a rel="nofollow" '
-                'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-     'tags': ['Luxury Condos',
-              'Sponsored',
-              'Weehawken',
-              'featured',
-              'Henley on Hudson'],
-     'title': 'Henley on Hudson Has Summertime Covered on New Jersey’s Gold '
-              'Coast',
-     'url': 'https://jerseydigs.com/henley-on-hudson-condos-for-sale-with-outdoor-amenities-port-imperial-weehawken/'},
- 8: {'author': 'Rima Abousleiman',
-     'date': 'Tue, 21 May 2019 13:30:42 +0000',
-     'summary': '<p>Zoned for both commercial and residential use, this '
-                'property includes a ground floor retail space and a '
-                'loft-style apartment, both boasting a sleek aesthetic. </p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/live-work-artist-space-21-risler-street-stockton/">Modern, '
-                'Lofty Live/Work Space in Stockton Fit for a Maker or '
-                'Artist</a> appeared first on <a rel="nofollow" '
-                'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-     'tags': ['Listing', 'Stockton', '21 Risler Street'],
-     'title': 'Modern, Lofty Live/Work Space in Stockton Fit for a Maker or '
-              'Artist',
-     'url': 'https://jerseydigs.com/live-work-artist-space-21-risler-street-stockton/'},
- 9: {'author': 'Mario Marroquin',
-     'date': 'Tue, 21 May 2019 13:00:17 +0000',
-     'summary': '<p>Developers BNE Real Estate Group and HornRock Properties '
-                'have launched leasing at their luxury community in downtown '
-                'Harrison.</p>\n'
-                '<p>The post <a rel="nofollow" '
-                'href="https://jerseydigs.com/one-harrison-now-leasing-luxury-apartments-for-rent-harrison/">One '
-                'Harrison Launches Leasing</a> appeared first on <a '
-                'rel="nofollow" href="https://jerseydigs.com">Jersey '
-                'Digs</a>.</p>',
-     'tags': ['Harrison', 'Luxury Rentals', 'Now Leasing', 'One Harrison'],
-     'title': 'One Harrison Launches Leasing',
-     'url': 'https://jerseydigs.com/one-harrison-now-leasing-luxury-apartments-for-rent-harrison/'},
- 10: {'author': 'Jared Kofsky',
-      'date': 'Tue, 21 May 2019 12:30:07 +0000',
-      'summary': '<p>If it moves forward, the ambitious Bayonne project within '
-                 'the Harbor Station South Redevelopment area would be one of '
-                 'the largest developments in New Jersey. </p>\n'
-                 '<p>The post <a rel="nofollow" '
-                 'href="https://jerseydigs.com/mahalaxmi-harbor-station-south-military-ocean-terminal-bayonne/">New '
-                 'Details on Bayonne Mega-Project Include 4500 Units, Hotel, '
-                 'Retail</a> appeared first on <a rel="nofollow" '
-                 'href="https://jerseydigs.com">Jersey Digs</a>.</p>',
-      'tags': ['Bayonne', 'Development', 'bay', 'Military Ocean Terminal'],
-      'title': 'New Details on Bayonne Mega-Project Include 4500 Units, Hotel, '
-               'Retail',
-      'url': 'https://jerseydigs.com/mahalaxmi-harbor-station-south-military-ocean-terminal-bayonne/'}}
-
+    dummy_data = {1: {'url': 'https://jerseydigs.com/bayonne-to-suspend-affordable-housing-requirements-for-1500-unit-development/', 'author': 'Jared Kofsky', 'title': 'Bayonne Could ‘Suspend Affordable Housing Requirements’ for 1,500+ Unit Development', 'date': 'Wed, 19 Jun 2019 13:30:02 +0000', 'summary': '<p>Jersey Digs has exclusively learned new details about a massive proposed high-rise development with seven buildings at the MOTBY site in Bayonne.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/bayonne-to-suspend-affordable-housing-requirements-for-1500-unit-development/">Bayonne Could ‘Suspend Affordable Housing Requirements’ for 1,500+ Unit Development</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Bayonne', 'Development', 'Politics', 'Malakshmi Goldsborough', 'Military Ocean Terminal']}, 2: {'url': 'https://jerseydigs.com/brooklyn-caffe-buon-gusto-opening-hoboken-location/', 'author': 'Chris Fry', 'title': 'Brooklyn’s Caffe Buon Gusto Opening Hoboken Location', 'date': 'Wed, 19 Jun 2019 13:00:31 +0000', 'summary': '<p>A pasta-centric Italian restaurant known for their cozy candlelit spaces is expanding across the Hudson River into the Mile Square City. </p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/brooklyn-caffe-buon-gusto-opening-hoboken-location/">Brooklyn’s Caffe Buon Gusto Opening Hoboken Location</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Food & Drink', 'Hoboken', '918 Washinton Street', 'caffe buon gusto']}, 3: {'url': 'https://jerseydigs.com/244-2nd-198-morgan-street-jersey-city-sold-5-3m/', 'author': 'Mario Marroquin', 'title': '14 Units Near Grove Street PATH in Jersey City Fetch $5.3M', 'date': 'Wed, 19 Jun 2019 12:30:25 +0000', 'summary': '<p>Two properties at 244 2nd Street and 198 Morgan Street traded to two international funds, brokerage firm Marcus &#038; Millichap announced.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/244-2nd-198-morgan-street-jersey-city-sold-5-3m/">14 Units Near Grove Street PATH in Jersey City Fetch $5.3M</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Deal', 'Jersey City', '198 Morgan Street', '244 2nd Street', 'downtown']}, 4: {'url': 'https://jerseydigs.com/peek-inside-cafe-peanut-opens-586-newark-ave-journal-square-jersey-city/', 'author': 'Chris Fry', 'title': 'A Peek Inside Café Peanut, Opening Today Near Journal Square', 'date': 'Tue, 18 Jun 2019 13:30:45 +0000', 'summary': '<p>Newark Avenue’s self-described “funky little place” will finally start serving customers their artisanal coffee and teas, salads, sandwiches and much more.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/peek-inside-cafe-peanut-opens-586-newark-ave-journal-square-jersey-city/">A Peek Inside Café Peanut, Opening Today Near Journal Square</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Food & Drink', 'Jersey City', 'Cafe Peanut', 'journal square']}, 5: {'url': 'https://jerseydigs.com/development-proposed-610-612-bloomfield-ave-bloomfield-new-jersey/', 'author': 'Jared Kofsky', 'title': 'New Development Could Rise Up to Eight Stories Over Bloomfield', 'date': 'Tue, 18 Jun 2019 13:00:51 +0000', 'summary': '<p>Bloomfield’s downtown has seen plenty of development over the last decade. Now, another new complex could bring over 200 apartments and stores to the Essex County community.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/development-proposed-610-612-bloomfield-ave-bloomfield-new-jersey/">New Development Could Rise Up to Eight Stories Over Bloomfield</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Bloomfield', 'Development', '18 Ward St', '610-612 Bloomfield Ave', '81-85 Washington St']}, 6: {'url': 'https://jerseydigs.com/development-plans-underway-weehawken-waterfront-park-lots/', 'author': 'Jared Kofsky', 'title': 'Plans Underway for One of Weehawken’s Last Undeveloped Waterfront Lots', 'date': 'Tue, 18 Jun 2019 12:30:41 +0000', 'summary': '<p>A proposal to bring 300 apartments and a parking garage near Weehawken Waterfront Park could go before the Weehawken Planning Board this week.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/development-plans-underway-weehawken-waterfront-park-lots/">Plans Underway for One of Weehawken&#8217;s Last Undeveloped Waterfront Lots</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Development', 'Port Imperial', 'Weehawken', 'Mack-Cali', 'waterfront park']}, 7: {'url': 'https://jerseydigs.com/50-story-towers-bates-street-redevelopment-area-jersey-city/', 'author': 'Chris Fry', 'title': 'Four Towers, 2,360 Units Proposed for the Edge of Downtown Jersey City', 'date': 'Mon, 17 Jun 2019 13:46:30 +0000', 'summary': '<p>Still in the early conceptual phase, the massive project would transform one of downtown Jersey City\'s last remaining industrial sections. In order to build it, the developer is ready to provide huge givebacks to the community. </p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/50-story-towers-bates-street-redevelopment-area-jersey-city/">Four Towers, 2,360 Units Proposed for the Edge of Downtown Jersey City</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Development', 'Infrastructure', 'Jersey City', 'Proposal', 'Bates Street Redevelopment Area', 'downtown', 'jc', 'Manhattan Building Company']}, 8: {'url': 'https://jerseydigs.com/enclave-apartments-open-jersey-city/', 'author': 'Darrell Simmons', 'title': 'Development Team, Jersey City Mayor Steven Fulop Officially Open The Enclave', 'date': 'Mon, 17 Jun 2019 13:45:49 +0000', 'summary': '<p>Recently, the development team hosted Jersey City Mayor Steven Fulop for a ceremonial ribbon cutting to officially open the new property.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/enclave-apartments-open-jersey-city/">Development Team, Jersey City Mayor Steven Fulop Officially Open The Enclave</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Development', 'Event', 'Jersey City', 'Lackawanna', 'soho west', 'The Enclave', 'van leer place']}, 9: {'url': 'https://jerseydigs.com/development-254-270-orange-ave-newark-proposed-gomes-group/', 'author': 'Jared Kofsky', 'title': 'Gomes Group Plans Over 100 Units in Newark’s Central Ward', 'date': 'Mon, 17 Jun 2019 13:30:06 +0000', 'summary': '<p>A plan to bring 105 apartments and retail space not far from the Newark Broad Street Station could soon be approved.</p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/development-254-270-orange-ave-newark-proposed-gomes-group/">Gomes Group Plans Over 100 Units in Newark’s Central Ward</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Development', 'Newark', 'Gomes & Gomes', 'gomes group']}, 10: {'url': 'https://jerseydigs.com/cherry-hill-contemporary-1146a-barbara-drive-for-sale/', 'author': 'Rima Abousleiman', 'title': 'This 1970s Contemporary in Cherry Hill is a Work of Art', 'date': 'Mon, 17 Jun 2019 13:00:16 +0000', 'summary': '<p>Though in need of some updates, this home offers jaw-dropping architecture in a private location. </p>\n<p>The post <a rel="nofollow" href="https://jerseydigs.com/cherry-hill-contemporary-1146a-barbara-drive-for-sale/">This 1970s Contemporary in Cherry Hill is a Work of Art</a> appeared first on <a rel="nofollow" href="https://jerseydigs.com">Jersey Digs</a>.</p>', 'tags': ['Cherry Hill', 'Listing', '1146A Barbara Drive', 'contemporary', 'modern']}}
 
     templateLoader = jinja2.FileSystemLoader(searchpath="./")
     templateEnv = jinja2.Environment(loader=templateLoader)
     templ = templateEnv.get_template(template)
-    return templ.render(feed=dummy_data)
+    return templ.render(
+        feed=dummy_data,
+        agent_email=kwargs['agent']
+    )
 
-x = render_template('templates/template.html')
+df = pd.read_csv('agents_data_19June2019.csv')
 
-message = Mail(
-    to_emails=['mitchbregs@gmail.com', 'jonathan@fieyomedia.com'],
-    from_email='jonathan@fieyomedia.com',
-    subject='Weekly Real Estate Feed - June 1, 2019',
-    html_content=x)
+errors = []
+for index, row in df.iterrows():
 
-try:
-    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-    response = sg.send(message)
-    print(response.status_code)
-    print(response.body)
-    print(response.headers)
-except Exception as e:
-    print(e.message)
+    x = render_template('templates/template.html', agent=row['agent_email'])
+
+    message = Mail(
+        to_emails=row['contact_email'],
+        from_email=row['agent_email'],
+        subject='Weekly Real Estate Feed - June 19, 2019',
+        html_content=x)
+
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        print(response.status_code)
+        print(response.body)
+        print(response.headers)
+    except Exception as e:
+        print(e.message)
+        errors.append('{}_{}'.format(row['agent_email'], row['contact_email']))
+
+print(errors)

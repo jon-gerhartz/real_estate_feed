@@ -10,6 +10,10 @@
         font-family: 'Open Sans', 'Arial', sans-serif;
       }
 
+      body {
+        background-image: url("https://i.imgur.com/9JfVCCD.png");
+      }
+
       /* FONTS */
       h1 {
         /* Never get smaller than this */
@@ -96,7 +100,8 @@
       /*  SECTIONS  */
       .section {
         clear: both;
-        padding: 0px;
+        padding: 0 25px;
+        background-color: white;
       }
 
       /*  COLUMN SETUP  */
@@ -145,14 +150,15 @@
     <div class="container">
       <div class="section group">
       	<div class="col span_4_of_4">
-      	   <h1>Weekly Real Estate Feed <span class="date" style="margin-left: 5px;">June 1, 2019</span></h1>
+      	   <h1>Weekly Real Estate Feed <span class="date" style="margin-left: 5px;">June 19, 2019</span></h1>
       	</div>
       </div>
 
       <div class="section group">
         <div class="col span_1_of_4">
           <h2 style="margin: 5px 0">Presented by</h2>
-          <img class="agent" src="https://i.imgur.com/H5FcYRp.png" /><span class="agent_name">Jon Gerhartz<span>
+          <img class="agent" src="https://i.imgur.com/H5FcYRp.png" /><span class="agent_name">
+          {{ agent_email }}<span>
         </div>
       </div>
 
@@ -172,9 +178,8 @@
           <h2 style="margin: 10px 0 5px 0;">Sponsored by</h2>
           <table>
             <tr>
-              <td><img class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
-              <td><img class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
-              <td><img class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
+              <td><img style="height: 80px; width: auto" class="sponsors" src="https://i.imgur.com/JS4ZyoF.png" /></td>
+              <td><img style="height: 80px; width: auto; margin-left: 20px" class="sponsors" src="https://i.imgur.com/zbDwl94.jpg" /></td>
             </tr>
           </table>
 
